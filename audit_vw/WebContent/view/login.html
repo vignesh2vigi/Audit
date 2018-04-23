@@ -1,0 +1,27 @@
+<div class="login-wrapper">
+      <div class="login-container">
+      <h1>
+          <a href="#" title="Dealer"><img src="images/logo-icon.png"></a>
+        </h1>
+        
+        <form name="theForm">
+          <div class="form-group">
+            <input class="form-control" ng-model="log.loginId" placeholder="Dealer Admin Id" type="text" name="username" required>
+            <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.username.$error.required">KuwyID is required</span>
+          </div>
+          <div class="form-group">
+            <input class="form-control" ng-model="log.pswd"  placeholder="Password" type="password" name="password" required>
+             <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.password.$error.required">Password is required</span>
+          </div>
+          
+		  <div class="form-group">
+		  <button type="submit" ng-click="login()" class="submit-btn">Submit</button>
+		   
+		  </div>
+		  <span class="text-danger" style='color:red' ng-if="error.code==1">{{error.message}}</span>
+		  <span class="text-danger" style='color:red' ng-if="error.code==2">{{error.message}}</span>
+		  <span class="text-danger" style='color:red' ng-if="error.code==3">{{error.message}}</span>
+		 
+        </form>
+      </div>
+    </div>

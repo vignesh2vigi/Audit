@@ -1,0 +1,26 @@
+<table ng-table ="usersTable" class="table table-striped">
+
+<thead>
+<tr>
+
+<th>Sno</th>
+<th>Name</th>
+<th>Location</th>
+<th>Ctp_name</th>
+<th>Ctp_mobileno</th>
+<th>Appt_dt</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody >
+<tr ng-repeat="loan in deal | filter:searchTxt" >
+<td>{{loan.sno}}</td>
+<td>{{loan.dealer_name}}</td>
+<td>{{loan.location}}</td>
+<td>{{loan.ctp_name}}</td>
+<td>{{loan.ctp_mobileno}}</td>
+<td>{{loan.appt_dt}}</td>
+<td><a href="#!stocklist/{{loan.sno}}">stock</a></td>
+</tr>
+</tbody>
+</table>

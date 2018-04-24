@@ -17,7 +17,14 @@ app.config(function($routeProvider) {
         templateUrl : 'view/stock.html',
         controller:'VmController'
         })
-  
+        .when("/stocklist/:sno", {
+        templateUrl : 'view/stocklist.html',
+        controller:'VmController'
+        })
+        .when("/dealerlist", {
+        templateUrl : 'view/dealerlist.html',
+        controller:'VmController'
+        })
     .otherwise("/login",{templateurl:"view/login.html",controller:'UserController'})
    	
 })

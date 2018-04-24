@@ -10,7 +10,7 @@
                     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
                     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
                     
-	<context:component-scan base-package="com.audit_vw.controller" />
+	<context:component-scan base-package="com.audit.controller" />
 	<mvc:annotation-driven></mvc:annotation-driven>
 	<mvc:default-servlet-handler />
 	<task:annotation-driven />
@@ -42,9 +42,9 @@
 		<property name="releaseHelperThreads" value="3" />
 	</bean>
 
-	 <bean id="userService" class="com.audit_vw.serviceimpl.UserServiceImpl"></bean>
-<bean id="userDao" class="com.audit_vw.daoimpl.UserDaoImpl"></bean>
+	 <bean id="userService" class="com.audit.serviceimpl.UserServiceImpl"></bean>
+<bean id="userDao" class="com.audit.daoimpl.UserDaoImpl"></bean>
 	
- 	 <bean id="vmService" class="com.audit_vw.serviceimpl.VmServiceImpl"></bean>
-<bean id="vmDao" class="com.audit_vw.daoimpl.VmDaoImpl"></bean>
+ 	 <bean id="vmService" class="com.audit.serviceimpl.VmServiceImpl"></bean>
+<bean id="vmDao" class="com.audit.daoimpl.VmDaoImpl"></bean>
 </beans>

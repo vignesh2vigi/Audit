@@ -7,6 +7,27 @@ app.factory('VmService',function($http){
 	{
 	return $http.post(BASE_URL+"/servlet/insertdealerinfo",user)
 	}
+	vmService.stockup=function(vehicle)
+	{
+	return $http.post(BASE_URL+"/servlet/stockup",vehicle)
+	}
+	vmService.getdetails=function()
+	{
+	return $http.get(BASE_URL+"/servlet/getdetails")
+	}
+	
+	vmService.stocklist=function()
+	{
+	return $http.get(BASE_URL+"/servlet/stocklist")
+	}
+	vmService.dealerlist=function()
+	{
+	return $http.get(BASE_URL+"/servlet/dealerlist")
+	}
+	vmService.stocklist=function(sno)
+	{
+	return $http.get(BASE_URL+"/servlet/stocklist/"+sno)
+	}
 	
 	return vmService;
 	

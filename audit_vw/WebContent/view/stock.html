@@ -1,24 +1,37 @@
+<link href="xls/file.css" media="all" rel="stylesheet" type="text/css"/>
+     <link href="xls/themes.css" media="all" rel="stylesheet" type="text/css"/>
+    <script src="xls/input.js" type="text/javascript"></script>
+    <script src="xls/theame.js" type="text/javascript"></script>
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" />
+
 <a class="btn btn-primary dropdown-toggle" href="file/sample.xlsx" id="btn" download>
 								Download Excel sample
 							</a>
 							
+							<br/><br/>
 							
-							
-			<table class="table table-bordered" >
-							<tbody>
-								<tr>
-									<td style="font-family: sans-serif; font-style: inherit">Upload
-										Excel <span style="color: red;">*</span>
-									</td>
-									<td><input class="form-control"  type='file' id="file" name="file" onChange="" /></td>
-								</tr>
-								<tr>
-									<td class="title1">&nbsp;</td>
-									<td><input type="submit" name="Upload Excel"
-										id="UploadExcel" value="Upload Excel" class="btn btn-primary dropdown-toggle" data-upload-url="http://localhost:8080/audit_vw/servlet/addlead"></td>
-								</tr>
-							</tbody>
+	<!-- <form role="form" enctype="multipart/form-data" name="myForm">
+    <input type="text"  ng-model="vehicle.sno">
+    <input type="file"  file-model ng-model="filesArray" multiple>
+    <button type="submit" ng-click="upload()">save</button>
+</form>	 -->		
 
-						</table>				
+
+ <div class="container">
+ 
+<input type="file" name="file" class="file" accept="file" 
+data-upload-url="http://localhost:8080/audit_vw/servlet/addlead"
+ data-perview-file-type="any">
+</div>
 							
-							
+							<h2>(OR)</h2><br/>
+							{{vehicle.sno}}<br>{{vehicle.no_stock}}
+				<div ng-repeat="vehicle in ray track by $index">
+				 <input type="hidden" ng-model="vehicle.sno"><br> 
+				<label>Vin no</label>
+				<input type="text" ng-model="vehicle.vin_no" placeholder="vin number"><br>
+				<label>Reg No</label>
+				<input type="text" ng-model="vehicle.reg_no" placeholder="reg number">
+				<button ng-show="vehicle.vin_no" type="submit" ng-click="stock()">Submit</button>				
+				</div>
+					

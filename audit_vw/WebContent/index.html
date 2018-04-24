@@ -161,18 +161,18 @@ div.footer.navbar-fixed-bottom span {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><b>KUWY</b></a>
+      <a class="navbar-brand" href=""><b>KUWY</b></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-         <li><a href="#!insert" ><!-- <span class="glyphicon glyphicon-th" aria-hidden="true"></span> -->Insert</a></li>
-        <!--  <li>
-          <a href="#!register" ng-hide="currentUser.name" role="button"><span class="glyphicon glyphicon-user"></span> REGISTER<span></span></a>
+         <li><a href="#!insert" ng-show="currentUser.loginId"><!-- <span class="glyphicon glyphicon-th" aria-hidden="true"></span> -->Insert</a></li>
+         <li>
+          <a href="#!dealerlist" ng-show="currentUser.loginId" role="button"><span class="glyphicon glyphicon-user"></span>Stock List<span></span></a>
         
         </li>
-        <li>
+      <!--   <li>
           <a href="#!login" role="button" ng-hide="currentUser.name" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a>
        
         </li>
@@ -184,7 +184,7 @@ div.footer.navbar-fixed-bottom span {
        
       
      
-      <li><a href="#!getblog" ng-show="currentUser.name"><span class="glyphicon glyphicon-bookmark" aria-hidden="true" ></span>BLOG</a></li>  -->
+      <li><a href="#!getblog" ng-show="currentUser.name"><span class="glyphicon glyphicon-bookmark" aria-hidden="true" ></span>BLOG</a></li> -->  
   <li><a href="" ng-click="logout()" ng-show="currentUser.loginId"><span class="glyphicon glyphicon-log-out"></span>LOGOUT</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

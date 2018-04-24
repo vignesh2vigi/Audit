@@ -1,0 +1,28 @@
+<table ng-table ="usersTable" class="table table-striped">
+
+<thead>
+<tr>
+
+<th>Vin no</th>
+<th>Reg_no</th>
+<th>Date</th>
+<th>Stock status</th>
+
+</tr>
+</thead>
+<tbody >
+<tr ng-repeat="loan in stock | filter:searchTxt" >
+
+<td>{{loan.vin_no}}</td>
+<td>{{loan.reg_no}}</td>
+
+<td>{{loan.stock_dt}}</td>
+<td>
+<div ng-if="loan.stock_status == '0'">
+    Pending
+</div>
+</td>
+
+</tr>
+</tbody>
+</table>

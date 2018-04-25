@@ -14,5 +14,6 @@ public interface VmDao {
 	
 	public List<Vmlogin> dealerlist();
 	
+	
 	public List<Vmlogin> stocklist(int sno);
 }

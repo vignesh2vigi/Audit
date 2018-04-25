@@ -66,15 +66,15 @@ public class Password {
 
     public static void main(String args []) throws Exception
     {
-    	/*Password td= new Password();
+   	Password td= new Password();
 
-       String target="name";
+       String target="exe";
         String encrypted=td.encrypt(target);
         String decrypted=td.decrypt(encrypted);
 
        System.out.println("String To Encrypt: "+ target);
         System.out.println("Encrypted String:" + encrypted);
-        System.out.println("Decrypted String:" + decrypted);*/
+        System.out.println("Decrypted String:" + decrypted);
 
     }
 

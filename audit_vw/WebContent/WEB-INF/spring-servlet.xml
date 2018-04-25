@@ -47,4 +47,7 @@
 	
  	 <bean id="vmService" class="com.audit.serviceimpl.VmServiceImpl"></bean>
 <bean id="vmDao" class="com.audit.daoimpl.VmDaoImpl"></bean>
+
+<bean id="exeService" class="com.audit.serviceimpl.ExeServiceImpl"></bean>
+<bean id="exeDao" class="com.audit.daoimpl.ExeDaoImpl"></bean>
 </beans>

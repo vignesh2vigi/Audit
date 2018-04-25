@@ -300,7 +300,8 @@
             t = self._getLayoutTemplate('progress');
             self.progressTemplate = t.replace('{class}', self.progressClass);
             self.progressCompleteTemplate = t.replace('{class}', self.progressCompleteClass);
-            self.progressErrorTemplate = t.replace('{class}', self.progressErrorClass);
+            /*self.progressErrorTemplate = t.replace('{class}', self.progressErrorClass);*/
+           
             self.dropZoneEnabled = $h.hasDragDropSupport() && self.dropZoneEnabled;
             self.isDisabled = $el.attr('disabled') || $el.attr('readonly');
             if (self.isDisabled) {
@@ -375,8 +376,9 @@
                 '    <div class="file-preview-thumbnails">\n' +
                 '    </div>\n' +
                 '    <div class="clearfix"></div>' +
-                '    <div class="file-preview-status text-center text-success"></div>\n' +
-                '    <div class="kv-fileinput-error"></div>\n' +
+          /*      '    <div class="file-preview-status text-center text-success"></div>\n' +
+                '    <div class="kv-fileinput-error"></div>\n' +*/
+
                 '    </div>\n' +
                 '</div>';
             tClose = '<div class="close fileinput-remove">&times;</div>\n';

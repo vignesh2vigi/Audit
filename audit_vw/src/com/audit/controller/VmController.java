@@ -1,6 +1,7 @@
 package com.audit.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -11,10 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -32,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.audit.model.Vmlogin;
 import com.audit.service.VmService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 
 @Controller
 public class VmController {
@@ -46,11 +56,89 @@ public class VmController {
 	}
 	
 	@RequestMapping(value = "/insertdealerinfo", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
- 	public ResponseEntity<Vmlogin> insertdealerinfo(@RequestBody Vmlogin vmlogin) {
+ 	public ResponseEntity<Vmlogin> insertdealerinfo(@RequestBody Vmlogin vmlogin,HttpServletRequest request) {
 		System.out.println("vm register");
 		
 		Vmlogin dealerRegLoginObj = vmService.dealerinfo(vmlogin);
 		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
+	}
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/uploadStatement", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Vmlogin> uploadStatement(
+			HttpServletRequest request) {
+
+		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		int month = now.get(Calendar.MONTH) + 1; // Note: zero based!
+		int day = now.get(Calendar.DAY_OF_MONTH);
+
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		System.out.println("isMultipart: " + isMultipart);
+		FileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		List<?> items = null;
+		try {
+			items = upload.parseRequest(request);
+		} catch (FileUploadException e) {
+			e.getMessage();
+		}
+		Iterator<?> iterator = items.iterator();
+		int i = 1;
+		String imageurl = "";
+		while (iterator.hasNext()) {
+			JSONObject obj = new JSONObject();
+			try {
+				FileItem item = (FileItem) iterator.next();
+				if (!item.isFormField()) {
+					String fileName = item.getName();
+					// System.out.println("fileName--->"+fileName);
+					DiskFileItem fileItem = (DiskFileItem) item;
+
+					Map<String, String> configr = new HashMap<String, String>();
+					// ----- For Production cloudinary add by 11-12-2017----- //
+					configr.put("cloud_name", "eimagecloud");
+					configr.put("api_key", "621264646611695");
+					configr.put("api_secret", "n9vJwzoUhGPUjTJDzsYvCJYdOew");
+
+					Cloudinary cloudinary = new Cloudinary(configr);
+					String imagePath = fileItem.getStoreLocation().toString()
+							.replace("\\", "//");
+
+					// System.out.println("imagePath----->"+imagePath);
+					@SuppressWarnings("rawtypes")
+					Map params = ObjectUtils.asMap("folder", "Kuwy/" + year
+							+ "/" + month + "/" + day, "public_id",
+							fileName.substring(0, fileName.lastIndexOf('.')),
+							"resource_type", "auto");
+					// fileName.substring(0, fileName.lastIndexOf('.'))
+					JSONObject result = (JSONObject) cloudinary.uploader()
+							.upload(imagePath, params);
+					String image = (String) result.get("url");
+					System.out.println(fileItem.getFieldName() + " - " + image);
+
+					// obj.put("url"+i, image);
+					imageurl += image + ",";
+					// imageurl.add(obj);
+
+					i++;
+				} else {
+					System.out.println("not filepart");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+			System.out.println("imageURL =====" + imageurl);
+		}
+
+		if (imageurl.endsWith(",")) {
+			imageurl = imageurl.substring(0, imageurl.length() - 1);
+		}
+
+		Vmlogin vdoutObj = new Vmlogin();
+		/*vdoutObj.setStatus(true);*/
+		vdoutObj.setAuth_letter(imageurl);
+		return new ResponseEntity<Vmlogin>(vdoutObj, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/addlead", method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)

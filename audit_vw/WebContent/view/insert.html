@@ -1,6 +1,6 @@
 
 
-<div class='login'>
+<div class='login' ng-show="currentUser.login_type=='1'">
   <h2>Dealer Info</h2>
   <form name="theForm">
  <label>DealerName</label>
@@ -27,9 +27,9 @@
   <input type="text"  ng-model="user.no_stock" name="no_stock" required>
   <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.no_stock.$error.required">No Stock is required</span><br>
   <label>Auth Letter</label>
- 
-   <input type="file"  file-model ng-model="filesArray" multiple>
-  <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.auth_letter.$error.required">Auth Letter is required</span><br>
+<!--  <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/> -->
+   <input type="file" multiple ng-simple-upload web-api-url="http://localhost:8080/audit_vw/servlet/uploadStatement" callback-fn="myCallback" />
+  <!-- <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.auth_letter.$error.required">Auth Letter is required</span><br> -->
   <br/>
   <br>
   <button type="submit"  class="btn btn-success" ng-click="dealerinfo()">submit</button>
@@ -37,3 +37,34 @@
  <br>
   </form>
   </div>
+  
+  
+  
+  
+  
+  <table ng-table ="usersTable" class="table table-striped" ng-show="currentUser.login_type=='2'" >
+
+<thead>
+<tr>
+
+<th>Sno</th>
+<th>Name</th>
+<th>Location</th>
+<th>Ctp_name</th>
+<th>Ctp_mobileno</th>
+<th>Appt_dt</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody >
+<tr ng-repeat="loan in deal | filter:searchTxt" >
+<td>{{loan.sno}}</td>
+<td>{{loan.dealer_name}}</td>
+<td>{{loan.location}}</td>
+<td>{{loan.ctp_name}}</td>
+<td>{{loan.ctp_mobileno}}</td>
+<td>{{loan.appt_dt}}</td>
+<td><a href="#!stocklist/{{loan.sno}}">Assign</a></td>
+</tr>
+</tbody>
+</table>

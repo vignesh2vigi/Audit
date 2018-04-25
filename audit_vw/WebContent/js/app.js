@@ -1,7 +1,7 @@
 /**
  * 
  */
-var app = angular.module("app", [ 'ngRoute','ngCookies'])
+var app = angular.module("app", [ 'ngRoute','ngCookies','angularFileUpload'])
 app.config(function($routeProvider) {
 
 	$routeProvider
@@ -13,8 +13,12 @@ app.config(function($routeProvider) {
         templateUrl : 'view/insert.html',
         controller:'VmController'
         })
-         .when("/stock", {
+       /*  .when("/stock", {
         templateUrl : 'view/stock.html',
+        controller:'VmController'
+        })*/
+        .when("/stock", {
+        templateUrl : 'view/excel.html',
         controller:'VmController'
         })
         .when("/stocklist/:sno", {

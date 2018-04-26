@@ -26,6 +26,34 @@ package com.audit.model;
 		private String reg_no;
 		private String stock_status;
 		private String stock_dt;
+		private String audit_id;
+		private int assign_by;
+		private int assign_to;
+		private String remarks;
+		public int getAssign_by() {
+			return assign_by;
+		}
+		public void setAssign_by(int assign_by) {
+			this.assign_by = assign_by;
+		}
+		public int getAssign_to() {
+			return assign_to;
+		}
+		public void setAssign_to(int assign_to) {
+			this.assign_to = assign_to;
+		}
+		public String getRemarks() {
+			return remarks;
+		}
+		public void setRemarks(String remarks) {
+			this.remarks = remarks;
+		}
+		public String getAudit_id() {
+			return audit_id;
+		}
+		public void setAudit_id(String audit_id) {
+			this.audit_id = audit_id;
+		}
 		public String getStock_status() {
 			return stock_status;
 		}

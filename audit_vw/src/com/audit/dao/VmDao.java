@@ -13,7 +13,13 @@ public interface VmDao {
 	public Vmlogin stockup(Vmlogin vmlogin);
 	
 	public List<Vmlogin> dealerlist();
-	
-	
+
 	public List<Vmlogin> stocklist(int sno);
+	
+	public Vmlogin assign(Vmlogin vmlogin);
+	
+	public Vmlogin assigninfo(String audit_id);
+	
+	public List<Vmlogin> assigndealerlist();
+	public List<Vmlogin> completedealerlist();
 }

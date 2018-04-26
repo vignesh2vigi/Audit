@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.audit.dao.UserDao;
 import com.audit.model.User;
+import com.audit.model.Vmlogin;
 import com.audit.utility.Password;
 
 public class UserDaoImpl implements UserDao {
@@ -36,11 +37,12 @@ public class UserDaoImpl implements UserDao {
 			
 			List<User> audit_vw = new ArrayList<User>(); 
 			
-			String query = "SELECT loginId,first_name,login_type FROM login_info WHERE loginId='"+user.getLoginId()+"' AND pswd='"+pass+"' AND active_status='1' "; 
+			String query = "SELECT sno,loginId,first_name,login_type FROM login_info WHERE loginId='"+user.getLoginId()+"' AND pswd='"+pass+"' AND active_status='1' "; 
 			
 			audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(User.class)); 
 			if (audit_vw.size() > 0) {
 				user2.setStatus(true);
+				user2.setSno(audit_vw.get(0).getSno());
 				user2.setLoginId(audit_vw.get(0).getLoginId());
 				user2.setFirst_name(audit_vw.get(0).getFirst_name());
 				user2.setLogin_type(audit_vw.get(0).getLogin_type());
@@ -170,11 +172,29 @@ public class UserDaoImpl implements UserDao {
 	}
 
 
+
+
 	@Override
-	public User insert(User user) {
+	public List<User> assign() {
 		// TODO Auto-generated method stub
-		return null;
+		User custVehiDetailsOutObj = new User();
+        List<User> custDetailsList = new ArrayList<User>();
+		String pendingQuery = "SELECT loginId,first_name,sno FROM login_info WHERE login_type='3'";
+		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		try {
+			
+			custDetailsList = this.jdbcTemplate.query(pendingQuery,
+					new BeanPropertyRowMapper(User.class));
+			
+		} catch (Exception e) {
+			custVehiDetailsOutObj.setStatus(false);
+			
+		}
+		return custDetailsList;
 	}
+
+
+	
 	
 	
 }

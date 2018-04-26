@@ -169,7 +169,16 @@ div.footer.navbar-fixed-bottom span {
       <ul class="nav navbar-nav">
          <li><a href="#!insert" ng-show="currentUser.login_type=='1'"><!-- <span class="glyphicon glyphicon-th" aria-hidden="true"></span> -->Insert</a></li>
          <li>
-          <a href="#!dealerlist" ng-show="currentUser.login_type=='1'" role="button"><span class="glyphicon glyphicon-user"></span>Dealer List<span></span></a>
+         <li><a href="#!insert" ng-show="currentUser.login_type=='2'"><!-- <span class="glyphicon glyphicon-th" aria-hidden="true"></span> -->Pendinglist</a></li>
+         <li>
+          <a href="#!dealerlist" ng-show="currentUser.login_type=='1'" role="button"></span>Pending List<span></span></a>        
+        </li>
+       
+        <li>
+          <a href="#!assignlist" ng-show="currentUser.loginId" role="button"><span class="glyphicon glyphicon-user"></span>Assigned List<span></span></a>
+        </li>
+        <li>
+          <a href="#!completelist" ng-show="currentUser.login_type=='1'" role="button"><span class="glyphicon glyphicon-user"></span>Complete List<span></span></a>
         
         </li>
         <li><a href="" ng-show="currentUser.loginId" > WELCOME: {{currentUser.loginId}}</a></li>

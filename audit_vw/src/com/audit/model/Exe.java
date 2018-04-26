@@ -29,10 +29,40 @@ public class Exe {
 	private String audit_id;
 	private String vin_no;
 	private String reg_no;
-	private int veh_avail_status;
+	private String veh_avail_status;
+	private String availablestatus;
+	public String getAvailablestatus() {
+		return availablestatus;
+	}
+	public void setAvailablestatus(String availablestatus) {
+		this.availablestatus = availablestatus;
+	}
 	private String message;
+	private String insert_dt;
+	
+	public String getInsert_dt() {
+		return insert_dt;
+	}
+	public void setInsert_dt(String insert_dt) {
+		this.insert_dt = insert_dt;
+	}
 	private List<Exe> dealerlist = new ArrayList<Exe>();
 	private List<Exe> auditlist = new ArrayList<Exe>();
+	private List<Exe> executive = new ArrayList<Exe>();
+	
+	public List<Exe> getExecutive() {
+		return executive;
+	}
+	public void setExecutive(List<Exe> executive) {
+		this.executive = executive;
+	}
+	private String mobileNo;
+	public String getMobileNo() {
+		return mobileNo;
+	}
+	public void setMobileNo(String mobileNo) {
+		this.mobileNo = mobileNo;
+	}
 	public List<Exe> getAuditlist() {
 		return auditlist;
 	}
@@ -51,10 +81,11 @@ public class Exe {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public int getVeh_avail_status() {
+	
+	public String getVeh_avail_status() {
 		return veh_avail_status;
 	}
-	public void setVeh_avail_status(int veh_avail_status) {
+	public void setVeh_avail_status(String veh_avail_status) {
 		this.veh_avail_status = veh_avail_status;
 	}
 	public String getVehi_images() {

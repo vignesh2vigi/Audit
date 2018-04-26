@@ -13,10 +13,10 @@ app.config(function($routeProvider) {
         templateUrl : 'view/insert.html',
         controller:'VmController'
         })
-       /*  .when("/stock", {
-        templateUrl : 'view/stock.html',
+        .when("/assign/:audit_id", {
+        templateUrl : 'view/insert.html',
         controller:'VmController'
-        })*/
+        })
         .when("/stock", {
         templateUrl : 'view/excel.html',
         controller:'VmController'
@@ -27,6 +27,15 @@ app.config(function($routeProvider) {
         })
         .when("/dealerlist", {
         templateUrl : 'view/dealerlist.html',
+        controller:'VmController'
+        })
+         .when("/assignlist", {
+        templateUrl : 'view/assignlist.html',
+        controller:'VmController'
+        })
+      
+         .when("/completelist", {
+        templateUrl : 'view/completelist.html',
         controller:'VmController'
         })
     .otherwise("/login",{templateurl:"view/login.html",controller:'UserController'})

@@ -44,5 +44,29 @@ public class VmServiceImpl implements VmService {
 		return vmDao.dealerlist();
 	}
 
+	@Override
+	public Vmlogin assign(Vmlogin vmlogin) {
+		// TODO Auto-generated method stub
+		return vmDao.assign(vmlogin);
+	}
+
+	@Override
+	public Vmlogin assigninfo(String audit_id) {
+		// TODO Auto-generated method stub
+		return vmDao.assigninfo(audit_id);
+	}
+
+	@Override
+	public List<Vmlogin> assigndealerlist() {
+		// TODO Auto-generated method stub
+		return vmDao.assigndealerlist();
+	}
+
+	@Override
+	public List<Vmlogin> completedealerlist() {
+		// TODO Auto-generated method stub
+		return vmDao.completedealerlist();
+	}
+
 
 }

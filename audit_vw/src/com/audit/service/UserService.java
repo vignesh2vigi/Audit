@@ -1,5 +1,7 @@
 package com.audit.service;
 
+import java.util.List;
+
 import com.audit.model.User;
 
 
@@ -10,5 +12,6 @@ public interface UserService {
 	public User login(User user);
 	 public boolean valid(String loginId);
 	   public boolean validpass(String user_password);
-	   public User insert(User user);
+	
+	   public List<User> assign();
 }

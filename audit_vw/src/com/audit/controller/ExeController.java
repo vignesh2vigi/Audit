@@ -1,7 +1,5 @@
 package com.audit.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +65,20 @@ public class ExeController {
 		System.out.println("exe register");
 		
 		Exe dealerRegLoginObj = exeService.stockinsert(exe);
+		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
+	}
+	@RequestMapping(value = "/update/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+ 	public ResponseEntity<?> update(@PathVariable String audit_id) {
+		System.out.println("exe register");
+		
+		Exe dealerRegLoginObj = exeService.update(audit_id);
+		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
+	}
+	@RequestMapping(value = "/finallist/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+ 	public ResponseEntity<?> finallist(@PathVariable String audit_id) {
+		System.out.println("exe register");
+		
+		Exe dealerRegLoginObj = exeService.finallist(audit_id);
 		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
 	}
 }

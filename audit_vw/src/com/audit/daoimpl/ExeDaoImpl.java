@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.audit.dao.ExeDao;
 import com.audit.model.Exe;
@@ -344,6 +345,162 @@ System.out.println("Image Insert=========="+insertDealerReg_query);
 	
 		return last;
 	}
+	@Override
+	public Exe update(String audit_id) {
+		// TODO Auto-generated method stub
+		Exe vm= new Exe();
+		try {
+			
+			int insertDealerReg_int = 0;
+			
+			String insertDealerReg_query ="UPDATE dealer_info SET comp_dt=now(),audit_status='3' WHERE audit_id='"+audit_id+"' ";
+System.out.println("Image Insert=========="+insertDealerReg_query);
+			insertDealerReg_int = this.jdbcTemplate.update(
+					insertDealerReg_query,
+					new Object[] {});
+			if (insertDealerReg_int > 0) {
+				vm.setStatus(true);
+				
+			} else {
+				vm.setStatus(false);
+			
+			}
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			vm.setStatus(false);
+			
+		}
+		try {
+		int insertDealerReg_int = 0;
+		
+		String insertDealerReg_query ="UPDATE dealer_visit_info SET end_dt=now() WHERE audit_id='"+audit_id+"' ";
+System.out.println("Image Insert=========="+insertDealerReg_query);
+		insertDealerReg_int = this.jdbcTemplate.update(
+				insertDealerReg_query,
+				new Object[] {});
+		if (insertDealerReg_int > 0) {
+			vm.setStatus(true);
+			
+		} else {
+			vm.setStatus(false);
+		
+		}
+	} catch (Exception e) {
+		System.out.println(e.getLocalizedMessage());
+		vm.setStatus(false);
+		
+	}
+		
+		
+		return vm;
+	}
+	@Override
+	public Exe finallist(String audit_id) {
+		// TODO Auto-generated method stub
+		Exe last = new Exe();
+		try {
+			
+			
+			List<Exe> audit_vw = new ArrayList<Exe>(); 
+			
+			String query = "SELECT vin_no,veh_avail_status,insert_dt,verify_dt FROM stock_verify_info WHERE audit_id='"+audit_id+"'"; 
+			System.out.println(""+query);
+			audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(Exe.class)); 
+			if (audit_vw.size() > 0) {
+				Exe user1 = new Exe();
+				user1.setStatus(true);
+					user1.setVin_no(audit_vw.get(0).getVin_no());
+					user1.setVeh_avail_status(audit_vw.get(0).getVeh_avail_status());
+					user1.setInsert_dt(audit_vw.get(0).getInsert_dt());
+					user1.setVerify_dt(audit_vw.get(0).getVerify_dt());
+					last.setAuditlist(audit_vw);
+				/*userOutObj.setLoginfo(user2);*/
+				} else { 
+					
+					last.setStatus(false);
+					/*userOutObj.setLoginfo(user2);*/
+					}
+			
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			last.setMessage(e.getMessage());
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			last.setMessage(e.getMessage());
+		}
+		
+try {
+			
+			
+			List<Exe> audit_vw1 = new ArrayList<Exe>(); 
+			
+			String query1 = "SELECT dealer_name,address FROM dealer_info WHERE audit_id='"+audit_id+"'"; 
+			System.out.println(""+query1);
+			audit_vw1 = getJdbcTemplate().query(query1, new BeanPropertyRowMapper(Exe.class)); 
+			if (audit_vw1.size() > 0) {
+				Exe user2 = new Exe();
+				user2.setStatus(true);
+				user2.setDealer_name(audit_vw1.get(0).getDealer_name());
+				user2.setAddress(audit_vw1.get(0).getAddress());
+				user2.setFirst_name(audit_vw1.get(0).getFirst_name());
+				last.setDealerlist(audit_vw1);
+					
+				/*userOutObj.setLoginfo(user2);*/
+				} else { 
+					
+					last.setStatus(false);
+					/*userOutObj.setLoginfo(user2);*/
+					}
+			
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			last.setMessage(e.getMessage());
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			last.setMessage(e.getMessage());
+		}
+
+try {
 	
+	
+	List<Exe> audit_vw2 = new ArrayList<Exe>(); 
+	
+	String query3 = "SELECT li.`first_name`,li.`mobileNo` FROM login_info AS li JOIN assigner_info AS ai ON li.`sno`=ai.`assign_to` WHERE audit_id='"+audit_id+"'"; 
+	System.out.println(""+query3);
+	audit_vw2 = getJdbcTemplate().query(query3, new BeanPropertyRowMapper(Exe.class)); 
+	if (audit_vw2.size() > 0) {
+		Exe user3 = new Exe();
+		user3.setStatus(true);
+		user3.setFirst_name(audit_vw2.get(0).getFirst_name());
+		user3.setMobileNo(audit_vw2.get(0).getMobileNo());
+		last.setExecutive(audit_vw2);
+			
+		/*userOutObj.setLoginfo(user2);*/
+		} else { 
+			
+			last.setStatus(false);
+			/*userOutObj.setLoginfo(user2);*/
+			}
+	
+} catch (DataAccessException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	last.setMessage(e.getMessage());
+	
+} catch (Exception e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	last.setMessage(e.getMessage());
+}
+
+		return last;
+	}
+
 
 }

@@ -9,7 +9,8 @@ public interface ExeDao {
 	   public boolean validpass(String pswd);
 	   public Exe deallist(int sno);
 	   public Exe insert(Exe exe);
-	   /*public List<Exe> auditlist(String audit_id);*/
 	   public Exe auditlist(String audit_id);
 	   public Exe stockinsert(Exe exe);
+	   public Exe update(String audit_id);
+	   public Exe finallist(String audit_id);
 }

@@ -21,7 +21,7 @@
   <input type="text"  ng-model="user.ctp_mobileno" name="ctp_mobileno" required>
   <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.ctp_mobileno.$error.required">Ctp Mobile is required</span><br>
   <label>App Date</label>
-  <input type="text"  ng-model="user.appt_dt" name="appt_dt" required>
+  <input type="text" id="datepicker"  ng-model="user.appt_dt" name="appt_dt" required>
   <span class="error" ng-show="(theForm.$dirty||submitted) && theForm.appt_dt.$error.required">App Date is required</span><br>
   <label>No Stock</label>
   <input type="text"  ng-model="user.no_stock" name="no_stock" required>
@@ -48,6 +48,7 @@
 <tr>
 
 <th>Sno</th>
+<th>Audit Id</th>
 <th>Name</th>
 <th>Location</th>
 <th>Ctp_name</th>
@@ -59,12 +60,48 @@
 <tbody >
 <tr ng-repeat="loan in deal | filter:searchTxt" >
 <td>{{loan.sno}}</td>
+<td>{{loan.audit_id}}</td>
 <td>{{loan.dealer_name}}</td>
 <td>{{loan.location}}</td>
 <td>{{loan.ctp_name}}</td>
 <td>{{loan.ctp_mobileno}}</td>
 <td>{{loan.appt_dt}}</td>
-<td><a href="#!stocklist/{{loan.sno}}">Assign</a></td>
+<td><a href="#!assign/{{loan.audit_id}}" data-toggle="modal" data-target="#myModal" class="btn btn-primary"  data-method="get">Assign</a></td>
 </tr>
 </tbody>
 </table>
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <!-- <h4 class="modal-title">{{audit_id}}</h4> -->
+        </div>
+        <div class="modal-body">
+       <input type="text" ng-model="loan.audit_id" disabled> 
+     Executive:<select  ng-model="loan.sno">
+<option value="">Select Executive</option>
+<option ng-repeat="loan in an"  value="{{loan.sno}}">{{loan.first_name}}</option>
+</select>
+{{loan.sno}}
+    <textarea rows="5" cols="20" ng-show="loan.sno" ng-model="loan.remark" title="Enter Blog Content" class="form-control" placeholder="REMARK" ></textarea>
+        </div>
+        <div class="modal-footer" ng-show="loan.remark">
+          <button type="button"  class="btn btn-success" data-dismiss="modal" id="some" ng-click="as(loan)">submit</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <script type="text/javascript">
+  $(document).ready(function(){
+
+		$('#some').click(function(){
+			$(".modal-backdrop").hide();
+		
+		}); 
+	});
+  $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+  </script>

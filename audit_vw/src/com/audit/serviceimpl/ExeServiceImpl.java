@@ -65,5 +65,17 @@ public class ExeServiceImpl implements ExeService {
 		return exeDao.auditlist(audit_id);
 	}
 
+	@Override
+	public Exe update(String audit_id) {
+		// TODO Auto-generated method stub
+		return exeDao.update(audit_id);
+	}
+
+	@Override
+	public Exe finallist(String audit_id) {
+		// TODO Auto-generated method stub
+		return exeDao.finallist(audit_id);
+	}
+
 	
 }

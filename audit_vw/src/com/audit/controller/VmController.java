@@ -62,6 +62,25 @@ public class VmController {
 		Vmlogin dealerRegLoginObj = vmService.dealerinfo(vmlogin);
 		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/assignid/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+ 	public ResponseEntity<Vmlogin> assignid(@PathVariable String audit_id,HttpSession session) {
+		System.out.println("vm register");
+		Vmlogin dealerRegLoginObj =vmService.assigninfo(audit_id);
+		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/assign", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+ 	public ResponseEntity<Vmlogin> assign(@RequestBody Vmlogin vmlogin,HttpSession session) {
+		System.out.println("vm register");
+		Vmlogin dealerRegLoginObj = new Vmlogin();
+		
+	int sno=(int)session.getAttribute("sno");
+	vmlogin.setAssign_by(sno);
+		 vmService.assign(vmlogin);
+		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/uploadStatement", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Vmlogin> uploadStatement(
@@ -314,13 +333,40 @@ public class VmController {
 				e.printStackTrace();
 			}
 			
-     String query1="insert into stock_info(dealer_mapped,vin_no,reg_no,stock_dt)values(?,?,?,now())";
+	try {
+				
+				
+				List<Vmlogin> audit_vw = new ArrayList<Vmlogin>(); 
+				
+				String query = "SELECT audit_id FROM dealer_info where sno='"+user2.getSno()+"'"; 
+				
+				audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(Vmlogin.class)); 
+				if (audit_vw.size() > 0) {
+					user2.setStatus(true);
+					user2.setAudit_id(audit_vw.get(0).getAudit_id());
+					
+					
+					/*userOutObj.setLoginfo(user2);*/
+					} else { 
+						
+						user2.setStatus(false);
+						/*userOutObj.setLoginfo(user2);*/
+						}
+			} catch (DataAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+     String query1="insert into stock_info(dealer_mapped,audit_id,vin_no,reg_no,stock_dt)values(?,?,?,?,now())";
 
 			System.out.println("query====="+query1);
 			insertDealerReg_int = this.jdbcTemplate.update(
 					query1,
 					new Object[] {
 							user2.getSno(),
+							user2.getAudit_id(),
 							vin_no,
 							reg_no
 							});
@@ -364,5 +410,16 @@ public class VmController {
 		 List<Vmlogin> list=vmService.dealerlist();
 		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
 }
-	
+	@RequestMapping(value="/assigndealerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> assigndealerlist(HttpSession session){
+		
+		 List<Vmlogin> list=vmService.assigndealerlist();
+		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
+}
+	@RequestMapping(value="/completedealerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> completedealerlist(HttpSession session){
+		
+		 List<Vmlogin> list=vmService.completedealerlist();
+		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
+}
 }

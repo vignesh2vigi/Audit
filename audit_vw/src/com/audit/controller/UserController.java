@@ -1,5 +1,7 @@
 package com.audit.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.audit.model.Error;
 import com.audit.model.User;
+import com.audit.model.Vmlogin;
 import com.audit.service.UserService;
 
 
@@ -34,7 +37,7 @@ public class UserController {
 			return new ResponseEntity<Error>(error,HttpStatus.NOT_ACCEPTABLE);
 		}
 		User validUser= userService.login(user);
-		
+		session.setAttribute("sno", validUser.getSno());
 		session.setAttribute("loginId", validUser.getLoginId());
 		return new ResponseEntity<User>(validUser,HttpStatus.OK);	
 	}
@@ -61,4 +64,10 @@ public class UserController {
 		session.invalidate();
 		return new ResponseEntity<User>(HttpStatus.OK);
 	}
+	@RequestMapping(value="/assignerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> assignerlist(HttpSession session){
+		
+		 List<User> list=userService.assign();
+		 return new ResponseEntity<List<User>>(list,HttpStatus.OK);
+}
 }

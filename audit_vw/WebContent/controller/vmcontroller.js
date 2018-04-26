@@ -2,14 +2,13 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 	
 	
 	var sno=$routeParams.sno
-		
+	var audit_id=$routeParams.audit_id
 	
 	$scope.dealerinfo=function(){
 		console.log($scope.user)
 		VmService.dealerinfo($scope.user).then(function(response){
 		console.log(response.data)
 		console.log(response.status)
-	
 		$location.path('/stock')
 		
 	},function(response){
@@ -21,7 +20,20 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 	})
 	}
 	
-
+	VmService.assignid(audit_id).then(function(response) {
+		console.log(response.data)
+		console.log(response.status)
+		 
+		$scope.loan = response.data
+		
+		
+	}, function(response) {
+		console.log(response.status)
+		if(response.status==401){
+    	
+			$location.path('/login')
+		}
+	})
 	
 	VmService.getdetails().then(function(response) {
 		console.log(response.data)
@@ -73,7 +85,21 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 				$location.path('/login')
 			}
 		})
-	
+	 	function assignerlist() {
+	    		VmService.assignerlist().then(function(response) {
+	    			console.log(response.data)
+	    			console.log(response.status)
+	    			 
+	    			$scope.an = response.data
+	    			
+	    		}, function(response) {
+	    			console.log(response.status)
+	    			if(response.status==401){
+	    	    	
+	    				$location.path('/login')
+	    			}
+	    		})
+	    	}
 	function dealerlist() {
 		VmService.dealerlist().then(function(response) {
 			console.log(response.data)
@@ -142,8 +168,62 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 
 	        console.info('uploader', uploader);
 	    
+	        $scope.as=function(loan){
+	    		console.log(loan.remark)
+	    		console.log(loan.sno)
+	    		console.log(loan.audit_id)
+	    		var assign={
+	    			"remarks":loan.remark,"assign_to":loan.sno,"audit_id":loan.audit_id
+	    		}
+	    		VmService.assign(assign).then(function(response){
+	    			console.log(response.data)
+	    			console.log(response.status)
+	    		
+	    			$location.path('/insert')
+	    			
+	    		},function(response){
+	    			console.log(response.data)
+	    			console.log(response.status)
+	    			$scope.error=response.data
+	    		console.log(response.status)
+	    	    	 $location.path('/insert')
+	    		})
+	    	}
+	   
+	        function assigndeal() {
+	    		VmService.assigndeal().then(function(response) {
+	    			console.log(response.data)
+	    			console.log(response.status)
+	    			 
+	    			$scope.assign = response.data
+	    			
+	    		}, function(response) {
+	    			console.log(response.status)
+	    			if(response.status==401){
+	    	    	
+	    				$location.path('/login')
+	    			}
+	    		})
+	    	}
+	        function comdeal() {
+	    		VmService.comdeal().then(function(response) {
+	    			console.log(response.data)
+	    			console.log(response.status)
+	    			 
+	    			$scope.com = response.data
+	    			
+	    		}, function(response) {
+	    			console.log(response.status)
+	    			if(response.status==401){
+	    	    	
+	    				$location.path('/login')
+	    			}
+	    		})
+	    	}
 		
-		
-		
+	    	
 	dealerlist()
+	assignerlist()
+	assigndeal()
+	comdeal()
 })

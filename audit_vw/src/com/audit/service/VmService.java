@@ -11,4 +11,8 @@ public interface VmService {
 	public Vmlogin stockup(Vmlogin vmlogin);
 	public List<Vmlogin> stocklist(int sno);
 	public List<Vmlogin> dealerlist();
+	public Vmlogin assign(Vmlogin vmlogin);
+	public Vmlogin assigninfo(String audit_id);
+	public List<Vmlogin> assigndealerlist();
+	public List<Vmlogin> completedealerlist();
 }

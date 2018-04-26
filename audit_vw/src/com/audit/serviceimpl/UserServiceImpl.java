@@ -1,5 +1,7 @@
 package com.audit.serviceimpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.audit.dao.UserDao;
@@ -45,9 +47,9 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public User insert(User user) {
+	public List<User> assign() {
 		// TODO Auto-generated method stub
-		return userDao.insert(user);
+		return userDao.assign();
 	}
 
 	

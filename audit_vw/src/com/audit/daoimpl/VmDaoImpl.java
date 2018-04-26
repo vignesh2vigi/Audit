@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.audit.dao.VmDao;
 import com.audit.model.Vmlogin;
+import com.audit.utility.GenerateUUID;
 
 public class VmDaoImpl implements VmDao {
 
@@ -29,17 +30,18 @@ public class VmDaoImpl implements VmDao {
 		Vmlogin vm = new Vmlogin();
 		try {
 			
-	
+			String requestId = "VM" + GenerateUUID.generateDelearListingId();
 			
 			int insertDealerReg_int = 0;
+			System.out.println("ID==="+requestId);
 			
 			
-			
-			String insertDealerReg_query = "INSERT INTO dealer_info (dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,no_stock,auth_letter,audit_status,visibility,insert_dt) VALUES (?,?,?,?,?,?,?,?,1,1,now())";
+			String insertDealerReg_query = "INSERT INTO dealer_info (audit_id,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,no_stock,auth_letter,audit_status,visibility,insert_dt) VALUES (?,?,?,?,?,?,?,?,?,1,1,now())";
 
 			insertDealerReg_int = this.jdbcTemplate.update(
 					insertDealerReg_query,
 					new Object[] { 
+							requestId,
 							vmlogin.getDealer_name(),
 							vmlogin.getLocation(),
 							vmlogin.getAddress(),
@@ -196,7 +198,139 @@ try {
 	public List<Vmlogin> dealerlist() {
 		Vmlogin custVehiDetailsOutObj = new Vmlogin();
         List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
-		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt FROM dealer_info ORDER BY appt_dt DESC";
+		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,audit_id,audit_status FROM dealer_info WHERE audit_status='1' ORDER BY insert_dt DESC";
+		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		try {
+			
+			custDetailsList = this.jdbcTemplate.query(pendingQuery,
+					new BeanPropertyRowMapper(Vmlogin.class));
+			
+		} catch (Exception e) {
+			custVehiDetailsOutObj.setStatus(false);
+			
+		}
+		return custDetailsList;
+	}
+
+	@Override
+	public Vmlogin assign(Vmlogin vmlogin) {
+		// TODO Auto-generated method stub
+		Vmlogin vm = new Vmlogin();
+		try {
+			
+	
+			
+			int insertDealerReg_int = 0;
+			
+			System.out.println(""+vmlogin.getAssign_by());
+			
+			String insertDealerReg_query = "INSERT INTO assigner_info (audit_id,assign_by,assign_to,remarks,assign_dt) VALUES (?,?,?,?,now())";
+
+			insertDealerReg_int = this.jdbcTemplate.update(
+					insertDealerReg_query,
+					new Object[] { 
+						vmlogin.getAudit_id(),
+						vmlogin.getAssign_by(),
+						vmlogin.getAssign_to(),
+						vmlogin.getRemarks()
+						
+								});
+			if (insertDealerReg_int > 0) {
+				vm.setStatus(true);
+				
+			} else {
+				vm.setStatus(false);
+				
+			}
+		} catch (DataAccessException e) {
+			System.out.println(e.getLocalizedMessage());
+			
+		}catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			
+		}
+		
+		try {
+			int insertDealerReg_int = 0;
+			
+			String insertDealerReg_query ="UPDATE dealer_info SET audit_status='2' WHERE audit_id='"+vmlogin.getAudit_id()+"' ";
+	
+			insertDealerReg_int = this.jdbcTemplate.update(
+					insertDealerReg_query,
+					new Object[] {});
+			if (insertDealerReg_int > 0) {
+				vm.setStatus(true);
+				
+			} else {
+				vm.setStatus(false);
+			
+			}
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			vm.setStatus(false);
+			
+		}
+		
+		return vm;
+	}
+
+	@Override
+	public Vmlogin assigninfo(String audit_id) {
+		// TODO Auto-generated method stub
+		Vmlogin user2 = new Vmlogin();
+		try {
+			
+			
+			List<Vmlogin> audit_vw = new ArrayList<Vmlogin>(); 
+			
+			String query = "SELECT audit_id FROM dealer_info WHERE audit_id='"+audit_id+"'"; 
+			
+			audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(Vmlogin.class)); 
+			if (audit_vw.size() > 0) {
+				user2.setStatus(true);
+				/*user2.setSno(audit_vw.get(0).getSno());*/
+				user2.setAudit_id(audit_vw.get(0).getAudit_id());
+				
+				/*userOutObj.setLoginfo(user2);*/
+				} else { 
+					
+					user2.setStatus(false);
+					/*userOutObj.setLoginfo(user2);*/
+					}
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user2;
+	}
+
+	@Override
+	public List<Vmlogin> assigndealerlist() {
+		Vmlogin custVehiDetailsOutObj = new Vmlogin();
+        List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
+		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,audit_id,audit_status FROM dealer_info WHERE audit_status='2' ORDER BY insert_dt DESC";
+		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		try {
+			
+			custDetailsList = this.jdbcTemplate.query(pendingQuery,
+					new BeanPropertyRowMapper(Vmlogin.class));
+			
+		} catch (Exception e) {
+			custVehiDetailsOutObj.setStatus(false);
+			
+		}
+		return custDetailsList;
+	}
+
+	@Override
+	public List<Vmlogin> completedealerlist() {
+		// TODO Auto-generated method stub
+		Vmlogin custVehiDetailsOutObj = new Vmlogin();
+        List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
+		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,audit_id,audit_status FROM dealer_info WHERE audit_status='3' ORDER BY insert_dt DESC";
 		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
 		try {
 			

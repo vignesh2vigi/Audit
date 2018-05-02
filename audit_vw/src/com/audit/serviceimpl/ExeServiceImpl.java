@@ -41,11 +41,7 @@ public class ExeServiceImpl implements ExeService {
 		return exeDao.insert(exe);
 	}
 
-	/*@Override
-	public List<Exe> auditlist(String audit_id) {
-		// TODO Auto-generated method stub
-		return exeDao.auditlist(audit_id);
-	}*/
+	
 
 	@Override
 	public Exe stockinsert(Exe exe) {
@@ -71,11 +67,7 @@ public class ExeServiceImpl implements ExeService {
 		return exeDao.update(audit_id);
 	}
 
-	@Override
-	public Exe finallist(String audit_id) {
-		// TODO Auto-generated method stub
-		return exeDao.finallist(audit_id);
-	}
+	
 
 	
 }

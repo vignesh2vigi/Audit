@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.audit.dao.ExeDao;
 import com.audit.model.Exe;
@@ -28,18 +27,18 @@ public class ExeDaoImpl implements ExeDao {
 			Password td= new Password();
 			
 			  String pass=td.encrypt(exe.getPswd());
-				System.out.println(""+pass);
+				
 			
 			List<Exe> audit_vw = new ArrayList<Exe>(); 
 			
-			String query = "SELECT sno,first_name FROM login_info WHERE loginId='"+exe.getLoginId()+"' AND pswd='"+pass+"' AND active_status='1' "; 
+			String query = "SELECT sno,first_name,mobileNo FROM login_info WHERE loginId='"+exe.getLoginId()+"' AND pswd='"+pass+"' AND active_status='1' "; 
 			
 			audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(Exe.class)); 
 			if (audit_vw.size() > 0) {
 				user2.setStatus(true);
 					user2.setSno(audit_vw.get(0).getSno());
 					user2.setFirst_name(audit_vw.get(0).getFirst_name());
-				/*userOutObj.setLoginfo(user2);*/
+				user2.setMobileNo(audit_vw.get(0).getMobileNo());
 				} else { 
 					
 					user2.setStatus(false);
@@ -90,8 +89,7 @@ public class ExeDaoImpl implements ExeDao {
 			 Password td=new Password();
 			 
 				  String pass=td.encrypt(pswd);
-					System.out.println("valid"+pass);
-			
+								
 				List<Exe> bankModelObjArray = new ArrayList<Exe>(); 
 				String query = "SELECT pswd FROM login_info WHERE pswd='"+pass+"'"; 
 				
@@ -136,39 +134,22 @@ public class ExeDaoImpl implements ExeDao {
 							});
 			if (insertDealerReg_int > 0) {
 				vm.setStatus(true);
-				
+				vm.setAudit_id(exe.getAudit_id());
 			} else {
 				vm.setStatus(false);
 				
 			}
 		} catch (DataAccessException e) {
 			System.out.println(e.getLocalizedMessage());
+			vm.setMessage(e.getMessage());
 			
 		}catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
-			
+			vm.setMessage(e.getMessage());
 		}
 		return vm;
 	}
-/*	@Override
-	public List<Exe> auditlist(String audit_id) {
-		// TODO Auto-generated method stub
-		Exe custVehiDetailsOutObj = new Exe();
-        List<Exe> custDetailsList = new ArrayList<Exe>();
-		String pendingQuery = "SELECT audit_id,vin_no,reg_no FROM stock_info WHERE audit_id='"+audit_id+"'";
-		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
-		try {
-			
-			custDetailsList = this.jdbcTemplate.query(pendingQuery,
-					new BeanPropertyRowMapper(Exe.class));
-			
-		} catch (Exception e) {
-			custVehiDetailsOutObj.setStatus(false);
-			
-		}
-		
-		return custDetailsList;
-	}*/
+
 	@Override
 	public Exe stockinsert(Exe exe) {
 		// TODO Auto-generated method stub
@@ -201,7 +182,7 @@ public class ExeDaoImpl implements ExeDao {
 			e.printStackTrace();
 		}
 	
-		System.out.println(""+user2.getSno());
+		/*System.out.println(""+user2.getSno());*/
 		
 		
 		
@@ -227,10 +208,10 @@ public class ExeDaoImpl implements ExeDao {
 			}
 		} catch (DataAccessException e) {
 			System.out.println(e.getLocalizedMessage());
-			
+			vm.setMessage(e.getMessage());
 		}catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
-			
+			vm.setMessage(e.getMessage());
 		}
 		
 		
@@ -240,7 +221,7 @@ public class ExeDaoImpl implements ExeDao {
 			int insertDealerReg_int = 0;
 			
 			String insertDealerReg_query ="UPDATE stock_info SET stock_status='1' WHERE vin_no=? AND audit_id=? ";
-System.out.println("Image Insert=========="+insertDealerReg_query);
+/*System.out.println("Image Insert=========="+insertDealerReg_query);*/
 			insertDealerReg_int = this.jdbcTemplate.update(
 					insertDealerReg_query,
 					new Object[] {exe.getVin_no(),exe.getAudit_id()});
@@ -269,8 +250,8 @@ System.out.println("Image Insert=========="+insertDealerReg_query);
 			
 			List<Exe> audit_vw = new ArrayList<Exe>(); 
 			
-			String query = "SELECT di.dealer_name,di.audit_id,di.address,di.appt_dt,di.no_stock,di.ctp_name FROM dealer_info as di JOIN assigner_info as ai WHERE assign_to='"+sno+"' AND audit_status='2' ORDER BY appt_dt DESC"; 
-			
+			String query = "SELECT di.dealer_name,di.audit_id,di.address,di.appt_dt,di.no_stock,di.ctp_name FROM dealer_info AS di JOIN assigner_info AS ai ON di.audit_id = ai.audit_id WHERE ai.assign_to='3' AND di.audit_status='2' ORDER BY appt_dt  DESC"; 
+			/*System.out.println(""+query);*/
 			audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(Exe.class)); 
 			if (audit_vw.size() > 0) {
 				Exe user2 = new Exe();
@@ -298,6 +279,7 @@ System.out.println("Image Insert=========="+insertDealerReg_query);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("error"+e.getMessage());
 			last.setMessage(e.getMessage());
 		}
 		
@@ -354,7 +336,7 @@ System.out.println("Image Insert=========="+insertDealerReg_query);
 			int insertDealerReg_int = 0;
 			
 			String insertDealerReg_query ="UPDATE dealer_info SET comp_dt=now(),audit_status='3' WHERE audit_id='"+audit_id+"' ";
-System.out.println("Image Insert=========="+insertDealerReg_query);
+/*System.out.println("Image Insert=========="+insertDealerReg_query);*/
 			insertDealerReg_int = this.jdbcTemplate.update(
 					insertDealerReg_query,
 					new Object[] {});
@@ -374,7 +356,7 @@ System.out.println("Image Insert=========="+insertDealerReg_query);
 		int insertDealerReg_int = 0;
 		
 		String insertDealerReg_query ="UPDATE dealer_visit_info SET end_dt=now() WHERE audit_id='"+audit_id+"' ";
-System.out.println("Image Insert=========="+insertDealerReg_query);
+/*System.out.println("Image Insert=========="+insertDealerReg_query);*/
 		insertDealerReg_int = this.jdbcTemplate.update(
 				insertDealerReg_query,
 				new Object[] {});
@@ -390,46 +372,39 @@ System.out.println("Image Insert=========="+insertDealerReg_query);
 		vm.setStatus(false);
 		
 	}
-		
-		
-		return vm;
-	}
-	@Override
-	public Exe finallist(String audit_id) {
-		// TODO Auto-generated method stub
-		Exe last = new Exe();
-		try {
+try {
 			
 			
 			List<Exe> audit_vw = new ArrayList<Exe>(); 
 			
-			String query = "SELECT vin_no,veh_avail_status,insert_dt,verify_dt FROM stock_verify_info WHERE audit_id='"+audit_id+"'"; 
-			System.out.println(""+query);
+			String query = "SELECT sv.vin_no,sv.veh_avail_status,si.`stock_dt`,sv.verify_dt,TIMEDIFF(sv.verify_dt, si.`stock_dt`) AS duartion FROM stock_verify_info AS sv JOIN stock_info AS si ON sv.`vin_no`=si.`vin_no` WHERE si.audit_id='"+audit_id+"'"; 
+			/*System.out.println(""+query);*/
 			audit_vw = getJdbcTemplate().query(query, new BeanPropertyRowMapper(Exe.class)); 
 			if (audit_vw.size() > 0) {
 				Exe user1 = new Exe();
 				user1.setStatus(true);
 					user1.setVin_no(audit_vw.get(0).getVin_no());
 					user1.setVeh_avail_status(audit_vw.get(0).getVeh_avail_status());
-					user1.setInsert_dt(audit_vw.get(0).getInsert_dt());
+					user1.setStock_dt(audit_vw.get(0).getStock_dt());
 					user1.setVerify_dt(audit_vw.get(0).getVerify_dt());
-					last.setAuditlist(audit_vw);
+					user1.setDuartion(audit_vw.get(0).getDuartion());
+					vm.setAuditlist(audit_vw);
 				/*userOutObj.setLoginfo(user2);*/
 				} else { 
 					
-					last.setStatus(false);
+					vm.setStatus(false);
 					/*userOutObj.setLoginfo(user2);*/
 					}
 			
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			last.setMessage(e.getMessage());
+			vm.setMessage(e.getMessage());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			last.setMessage(e.getMessage());
+			vm.setMessage(e.getMessage());
 		}
 		
 try {
@@ -438,7 +413,7 @@ try {
 			List<Exe> audit_vw1 = new ArrayList<Exe>(); 
 			
 			String query1 = "SELECT dealer_name,address FROM dealer_info WHERE audit_id='"+audit_id+"'"; 
-			System.out.println(""+query1);
+			/*System.out.println(""+query1);*/
 			audit_vw1 = getJdbcTemplate().query(query1, new BeanPropertyRowMapper(Exe.class)); 
 			if (audit_vw1.size() > 0) {
 				Exe user2 = new Exe();
@@ -446,61 +421,30 @@ try {
 				user2.setDealer_name(audit_vw1.get(0).getDealer_name());
 				user2.setAddress(audit_vw1.get(0).getAddress());
 				user2.setFirst_name(audit_vw1.get(0).getFirst_name());
-				last.setDealerlist(audit_vw1);
+				vm.setDealerlist(audit_vw1);
 					
 				/*userOutObj.setLoginfo(user2);*/
 				} else { 
 					
-					last.setStatus(false);
+					vm.setStatus(false);
 					/*userOutObj.setLoginfo(user2);*/
 					}
 			
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			last.setMessage(e.getMessage());
+			vm.setMessage(e.getMessage());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			last.setMessage(e.getMessage());
+			vm.setMessage(e.getMessage());
 		}
 
-try {
-	
-	
-	List<Exe> audit_vw2 = new ArrayList<Exe>(); 
-	
-	String query3 = "SELECT li.`first_name`,li.`mobileNo` FROM login_info AS li JOIN assigner_info AS ai ON li.`sno`=ai.`assign_to` WHERE audit_id='"+audit_id+"'"; 
-	System.out.println(""+query3);
-	audit_vw2 = getJdbcTemplate().query(query3, new BeanPropertyRowMapper(Exe.class)); 
-	if (audit_vw2.size() > 0) {
-		Exe user3 = new Exe();
-		user3.setStatus(true);
-		user3.setFirst_name(audit_vw2.get(0).getFirst_name());
-		user3.setMobileNo(audit_vw2.get(0).getMobileNo());
-		last.setExecutive(audit_vw2);
-			
-		/*userOutObj.setLoginfo(user2);*/
-		} else { 
-			
-			last.setStatus(false);
-			/*userOutObj.setLoginfo(user2);*/
-			}
-	
-} catch (DataAccessException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-	last.setMessage(e.getMessage());
-	
-} catch (Exception e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-	last.setMessage(e.getMessage());
-}
-
-		return last;
+				
+		return vm;
 	}
+	
 
 
 }

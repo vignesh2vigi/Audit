@@ -32,53 +32,45 @@ public class ExeController {
 			return new ResponseEntity<Error>(error,HttpStatus.NOT_ACCEPTABLE);
 		}
 		Exe validUser= exeService.login(exe);
-		
 		session.setAttribute("loginId", validUser.getLoginId());
 		return new ResponseEntity<Exe>(validUser,HttpStatus.OK);	
 	}
 	
 
-	@RequestMapping(value="/dealerlist/{sno}",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/dealerlist/{sno}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> dealerlist(@PathVariable int sno,HttpSession session){
 		
 		 Exe list=exeService.deallist(sno);
 		 return new ResponseEntity<Exe>(list,HttpStatus.OK);
 }
 	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/stockinsert", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<?> insert(@RequestBody Exe exe) {
-		System.out.println("exe register");
+		
 		
 		Exe dealerRegLoginObj = exeService.insert(exe);
 		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
 	}
 	
 
-	@RequestMapping(value="/auditlist/{audit_id}",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/auditlist/{audit_id}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> stocklist(@PathVariable String audit_id,HttpSession session){
 		
 		Exe list=exeService.auditlist(audit_id);
 		 return new ResponseEntity<Exe>(list,HttpStatus.OK);
 }
-	@RequestMapping(value = "/stockinsert", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/stockupdate", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<?> stockinsert(@RequestBody Exe exe) {
-		System.out.println("exe register");
 		
 		Exe dealerRegLoginObj = exeService.stockinsert(exe);
 		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
 	}
-	@RequestMapping(value = "/update/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/endaudit/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<?> update(@PathVariable String audit_id) {
-		System.out.println("exe register");
+	
 		
 		Exe dealerRegLoginObj = exeService.update(audit_id);
 		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
 	}
-	@RequestMapping(value = "/finallist/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
- 	public ResponseEntity<?> finallist(@PathVariable String audit_id) {
-		System.out.println("exe register");
-		
-		Exe dealerRegLoginObj = exeService.finallist(audit_id);
-		return new ResponseEntity<Exe>(dealerRegLoginObj,HttpStatus.OK);
-	}
+
 }

@@ -31,6 +31,27 @@ public class Exe {
 	private String reg_no;
 	private String veh_avail_status;
 	private String availablestatus;
+	private String duartion;
+	private String auth_letter;
+	private String stock_dt;
+	public String getStock_dt() {
+		return stock_dt;
+	}
+	public void setStock_dt(String stock_dt) {
+		this.stock_dt = stock_dt;
+	}
+	public String getAuth_letter() {
+		return auth_letter;
+	}
+	public void setAuth_letter(String auth_letter) {
+		this.auth_letter = auth_letter;
+	}
+	public String getDuartion() {
+		return duartion;
+	}
+	public void setDuartion(String duartion) {
+		this.duartion = duartion;
+	}
 	public String getAvailablestatus() {
 		return availablestatus;
 	}

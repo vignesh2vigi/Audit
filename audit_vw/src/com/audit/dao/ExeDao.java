@@ -12,5 +12,5 @@ public interface ExeDao {
 	   public Exe auditlist(String audit_id);
 	   public Exe stockinsert(Exe exe);
 	   public Exe update(String audit_id);
-	   public Exe finallist(String audit_id);
+	
 }

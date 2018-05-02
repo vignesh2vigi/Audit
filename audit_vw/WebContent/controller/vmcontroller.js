@@ -1,11 +1,67 @@
-app.controller('VmController',function($scope,VmService,$location,$rootScope,$http,$routeParams,FileUploader){
+app.controller('VmController',function($http,$scope,VmService,$location,$rootScope,$http,$routeParams,FileUploader){
 	
 	
 	var sno=$routeParams.sno
 	var audit_id=$routeParams.audit_id
 	
-	$scope.dealerinfo=function(){
-		console.log($scope.user)
+	
+	  $scope.getFileDetails = function (e) {
+
+        $scope.files = [];
+        console.log( $scope.files)
+        $scope.$apply(function () {
+
+            // STORE THE FILE OBJECT IN AN ARRAY.
+            for (var i = 0; i < e.files.length; i++) {
+            	console.log(e.files[i])
+                $scope.files.push(e.files[i])
+                
+            }
+   		 var data = new FormData();
+
+         for (var i in $scope.files) {
+             data.append("uploadedFile", $scope.files[i]);
+         }
+     	console.log("check"+data)
+         var request = {
+        	
+                 method: 'POST',
+                 url: 'servlet/uploadStatement',
+                 data: data,
+                 headers: {
+                     'Content-Type': undefined
+                 }
+             };
+     	  $http(request)
+     	  .success(function (data, status) {
+        console.log(data);
+        $scope.user.auth_letter = data.d;
+    })
+              .error(function () {
+              	console.log("upload Statement error")
+              });
+    /* 	VmService.image(data).then(function(response){
+    		console.log(response.data)
+    		console.log(response.status)
+    		$scope.user=response.data
+    		$location.path('/insert')
+    		                               
+    	},function(response){
+    		console.log(response.data)
+    		console.log(response.status)
+    		$scope.error=response.data
+    	console.log(response.status)
+        	 $location.path('/insert')
+    	})*/
+    	
+
+           // $scope.review size = e.files.length;
+        });
+    };
+	
+	$scope.dealerinfo=function(user){
+
+	
 		VmService.dealerinfo($scope.user).then(function(response){
 		console.log(response.data)
 		console.log(response.status)
@@ -106,8 +162,9 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 			console.log(response.status)
 			 
 			$scope.deal = response.data
-			$scope.items = 3;
-		}, function(response) {
+			$rootScope.pend=$scope.deal.length
+			/*$scope.items = 3;
+*/		}, function(response) {
 			console.log(response.status)
 			if(response.status==401){
 	    	
@@ -179,14 +236,14 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 	    			console.log(response.data)
 	    			console.log(response.status)
 	    		
-	    			$location.path('/insert')
+	    			$location.path('/dealerlist')
 	    			
 	    		},function(response){
 	    			console.log(response.data)
 	    			console.log(response.status)
 	    			$scope.error=response.data
 	    		console.log(response.status)
-	    	    	 $location.path('/insert')
+	    	    	 $location.path('/dealerlist')
 	    		})
 	    	}
 	   
@@ -196,7 +253,7 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 	    			console.log(response.status)
 	    			 
 	    			$scope.assign = response.data
-	    			
+	    			$rootScope.asn=$scope.assign.length
 	    		}, function(response) {
 	    			console.log(response.status)
 	    			if(response.status==401){
@@ -211,7 +268,7 @@ app.controller('VmController',function($scope,VmService,$location,$rootScope,$ht
 	    			console.log(response.status)
 	    			 
 	    			$scope.com = response.data
-	    			
+	    			$rootScope.cpt=$scope.com.length
 	    		}, function(response) {
 	    			console.log(response.status)
 	    			if(response.status==401){

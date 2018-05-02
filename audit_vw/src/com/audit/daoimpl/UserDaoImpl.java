@@ -33,7 +33,7 @@ public class UserDaoImpl implements UserDao {
 			Password td= new Password();
 			
 			  String pass=td.encrypt(user.getPswd());
-				System.out.println(""+pass);
+				
 			
 			List<User> audit_vw = new ArrayList<User>(); 
 			
@@ -47,6 +47,7 @@ public class UserDaoImpl implements UserDao {
 				user2.setFirst_name(audit_vw.get(0).getFirst_name());
 				user2.setLogin_type(audit_vw.get(0).getLogin_type());
 				
+				
 				/*userOutObj.setLoginfo(user2);*/
 				} else { 
 					
@@ -56,8 +57,10 @@ public class UserDaoImpl implements UserDao {
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			user2.setMessage(e.getMessage());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			user2.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
 	
@@ -94,7 +97,7 @@ public class UserDaoImpl implements UserDao {
 			 Password td=new Password();
 			 
 				  String pass=td.encrypt(pswd);
-					System.out.println("valid"+pass);
+				
 			
 				List<User> bankModelObjArray = new ArrayList<User>(); 
 				String query = "SELECT pswd FROM login_info WHERE pswd='"+pass+"'"; 
@@ -135,7 +138,7 @@ public class UserDaoImpl implements UserDao {
 			Password td= new Password();
 			
 	      String pass=td.encrypt(user.getPswd());
-			System.out.println(""+pass);
+		
 			
 			int insertDealerReg_int = 0;
 			
@@ -180,7 +183,7 @@ public class UserDaoImpl implements UserDao {
 		User custVehiDetailsOutObj = new User();
         List<User> custDetailsList = new ArrayList<User>();
 		String pendingQuery = "SELECT loginId,first_name,sno FROM login_info WHERE login_type='3'";
-		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		
 		try {
 			
 			custDetailsList = this.jdbcTemplate.query(pendingQuery,

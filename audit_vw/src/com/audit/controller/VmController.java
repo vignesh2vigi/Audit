@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.audit.model.Error;
 import com.audit.model.Vmlogin;
 import com.audit.service.VmService;
 import com.cloudinary.Cloudinary;
@@ -57,7 +58,7 @@ public class VmController {
 	
 	@RequestMapping(value = "/insertdealerinfo", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<Vmlogin> insertdealerinfo(@RequestBody Vmlogin vmlogin,HttpServletRequest request) {
-		System.out.println("vm register");
+
 		
 		Vmlogin dealerRegLoginObj = vmService.dealerinfo(vmlogin);
 		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
@@ -65,14 +66,14 @@ public class VmController {
 	
 	@RequestMapping(value = "/assignid/{audit_id}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<Vmlogin> assignid(@PathVariable String audit_id,HttpSession session) {
-		System.out.println("vm register");
+		
 		Vmlogin dealerRegLoginObj =vmService.assigninfo(audit_id);
 		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/assign", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<Vmlogin> assign(@RequestBody Vmlogin vmlogin,HttpSession session) {
-		System.out.println("vm register");
+		
 		Vmlogin dealerRegLoginObj = new Vmlogin();
 		
 	int sno=(int)session.getAttribute("sno");
@@ -84,8 +85,8 @@ public class VmController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/uploadStatement", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Vmlogin> uploadStatement(
-			HttpServletRequest request) {
-
+			 HttpServletRequest request) {
+		
 		Calendar now = Calendar.getInstance();
 		int year = now.get(Calendar.YEAR);
 		int month = now.get(Calendar.MONTH) + 1; // Note: zero based!
@@ -101,18 +102,23 @@ public class VmController {
 		} catch (FileUploadException e) {
 			e.getMessage();
 		}
+		System.out.println("second check"+items);
 		Iterator<?> iterator = items.iterator();
+		System.out.println("third"+iterator);
 		int i = 1;
 		String imageurl = "";
+		System.out.println("fourth"+iterator.hasNext()); 
 		while (iterator.hasNext()) {
 			JSONObject obj = new JSONObject();
+			System.out.println("fourth===4"+iterator.hasNext()); 
 			try {
 				FileItem item = (FileItem) iterator.next();
+				System.out.println("fifth"+item); 
 				if (!item.isFormField()) {
 					String fileName = item.getName();
-					// System.out.println("fileName--->"+fileName);
+					System.out.println("fileName--->"+fileName);
 					DiskFileItem fileItem = (DiskFileItem) item;
-
+System.out.println("sixth"+fileItem);
 					Map<String, String> configr = new HashMap<String, String>();
 					// ----- For Production cloudinary add by 11-12-2017----- //
 					configr.put("cloud_name", "eimagecloud");
@@ -138,7 +144,6 @@ public class VmController {
 					// obj.put("url"+i, image);
 					imageurl += image + ",";
 					// imageurl.add(obj);
-
 					i++;
 				} else {
 					System.out.println("not filepart");
@@ -155,7 +160,7 @@ public class VmController {
 		}
 
 		Vmlogin vdoutObj = new Vmlogin();
-		/*vdoutObj.setStatus(true);*/
+		vdoutObj.setStatus(true);
 		vdoutObj.setAuth_letter(imageurl);
 		return new ResponseEntity<Vmlogin>(vdoutObj, HttpStatus.OK);
 	}
@@ -168,12 +173,12 @@ public class VmController {
 		ArrayList<Hashtable<String, String>> al = new ArrayList<Hashtable<String, String>>();
 
 		Map<String, String> mp = new HashMap<String, String>();
-		System.out.println("============="+file);
+		
 		int insertDealerReg_int = 0;
 		try {
 			
 			HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
-			System.out.println("2========="+file.getInputStream());
+			
 			HSSFSheet sh = (HSSFSheet) workbook.getSheet("Sheet1");
 			Iterator<HSSFRow> rowitreator = sh.rowIterator();
 			int rowcount = 0;
@@ -269,16 +274,9 @@ public class VmController {
 
 					ht.put("reg_no", reg_no);
 
-				
-					
 					al.add(ht);
-
 				}
-
 				rowcount = rowcount + 1;
-
-				
-
 			}
 			}
 			catch (Exception e){
@@ -302,8 +300,6 @@ public class VmController {
 				String reg_no=h.get("reg_no");
 		    
 	
-			System.out.println("leadid============="+vin_no);
-			System.out.println("clientid==========="+reg_no);
 			
 			Vmlogin user2 = new Vmlogin();
 			try {
@@ -361,7 +357,7 @@ public class VmController {
 			}
      String query1="insert into stock_info(dealer_mapped,audit_id,vin_no,reg_no,stock_dt)values(?,?,?,?,now())";
 
-			System.out.println("query====="+query1);
+			
 			insertDealerReg_int = this.jdbcTemplate.update(
 					query1,
 					new Object[] {
@@ -385,40 +381,64 @@ public class VmController {
 	
 	
 	@RequestMapping(value = "/getdetails", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
- 	public ResponseEntity<Vmlogin> getdetails() {
-		System.out.println("vm details");
+ 	public ResponseEntity<?> getdetails(HttpSession session) {
+String admin_username=(String)session.getAttribute("loginId");
+		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		
 		Vmlogin dealerRegLoginObj = vmService.details();
 		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
 	}
 	@RequestMapping(value = "/stockup", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
- 	public ResponseEntity<Vmlogin> stockup(@RequestBody Vmlogin vmlogin) {
-		System.out.println("vm register");
+ 	public ResponseEntity<?> stockup(@RequestBody Vmlogin vmlogin,HttpSession session) {
+String admin_username=(String)session.getAttribute("loginId");
+		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		
 		Vmlogin dealerRegLoginObj = vmService.stockup(vmlogin);
 		return new ResponseEntity<Vmlogin>(dealerRegLoginObj,HttpStatus.OK);
 	}
 	@RequestMapping(value="/stocklist/{sno}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> stocklist(@PathVariable int sno,HttpSession session){
+String admin_username=(String)session.getAttribute("loginId");
 		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		 List<Vmlogin> list=vmService.stocklist(sno);
 		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
 }
 	@RequestMapping(value="/dealerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> dealerlist(HttpSession session){
+String admin_username=(String)session.getAttribute("loginId");
 		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		 List<Vmlogin> list=vmService.dealerlist();
 		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
 }
 	@RequestMapping(value="/assigndealerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> assigndealerlist(HttpSession session){
+String admin_username=(String)session.getAttribute("loginId");
 		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		 List<Vmlogin> list=vmService.assigndealerlist();
 		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
 }
 	@RequestMapping(value="/completedealerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> completedealerlist(HttpSession session){
+String admin_username=(String)session.getAttribute("loginId");
 		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		 List<Vmlogin> list=vmService.completedealerlist();
 		 return new ResponseEntity<List<Vmlogin>>(list,HttpStatus.OK);
 }

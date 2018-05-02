@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.audit.model.Error;
 import com.audit.model.User;
-import com.audit.model.Vmlogin;
 import com.audit.service.UserService;
 
 
@@ -44,7 +43,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/registration", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<?> dealerRegistration(@RequestBody User user) {
-		System.out.println("user register");
+		
 		if(userService.valid(user.getLoginId())){	
 			Error error=new Error(1,"Already user_id exist");
 			return new ResponseEntity<Error>(error,HttpStatus.NOT_ACCEPTABLE);
@@ -55,7 +54,7 @@ public class UserController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> logout(HttpSession session){
 		String admin_username=(String)session.getAttribute("loginId");
-		System.out.println("Name of the user is"+ admin_username);
+		
 		if(admin_username==null){
 			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
 		}
@@ -66,7 +65,11 @@ public class UserController {
 	}
 	@RequestMapping(value="/assignerlist",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> assignerlist(HttpSession session){
+String admin_username=(String)session.getAttribute("loginId");
 		
+		if(admin_username==null){
+			return new ResponseEntity<Error>(HttpStatus.UNAUTHORIZED);
+		}
 		 List<User> list=userService.assign();
 		 return new ResponseEntity<List<User>>(list,HttpStatus.OK);
 }

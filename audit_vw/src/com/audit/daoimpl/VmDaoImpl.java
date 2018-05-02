@@ -33,10 +33,10 @@ public class VmDaoImpl implements VmDao {
 			String requestId = "VM" + GenerateUUID.generateDelearListingId();
 			
 			int insertDealerReg_int = 0;
-			System.out.println("ID==="+requestId);
 			
 			
-			String insertDealerReg_query = "INSERT INTO dealer_info (audit_id,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,no_stock,auth_letter,audit_status,visibility,insert_dt) VALUES (?,?,?,?,?,?,?,?,?,1,1,now())";
+			
+			String insertDealerReg_query = "INSERT INTO dealer_info (audit_id,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,no_stock,auth_letter,audit_status,visibility,insert_dt) VALUES (?,?,?,?,?,?,?,?,?,'1','1',now())";
 
 			insertDealerReg_int = this.jdbcTemplate.update(
 					insertDealerReg_query,
@@ -102,7 +102,7 @@ public class VmDaoImpl implements VmDao {
 			e.printStackTrace();
 		}
 	
-		System.out.println(""+user2.getSno());
+		
 try {
 			
 			
@@ -181,7 +181,7 @@ try {
 		Vmlogin custVehiDetailsOutObj = new Vmlogin();
 	         List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
 			String pendingQuery = "SELECT vin_no,reg_no,stock_status,stock_dt FROM stock_info where dealer_mapped ='"+sno+"' ORDER BY stock_dt DESC";
-			System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		
 			try {
 				
 				custDetailsList = this.jdbcTemplate.query(pendingQuery,
@@ -199,7 +199,7 @@ try {
 		Vmlogin custVehiDetailsOutObj = new Vmlogin();
         List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
 		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,audit_id,audit_status FROM dealer_info WHERE audit_status='1' ORDER BY insert_dt DESC";
-		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		
 		try {
 			
 			custDetailsList = this.jdbcTemplate.query(pendingQuery,
@@ -222,8 +222,7 @@ try {
 			
 			int insertDealerReg_int = 0;
 			
-			System.out.println(""+vmlogin.getAssign_by());
-			
+						
 			String insertDealerReg_query = "INSERT INTO assigner_info (audit_id,assign_by,assign_to,remarks,assign_dt) VALUES (?,?,?,?,now())";
 
 			insertDealerReg_int = this.jdbcTemplate.update(
@@ -312,7 +311,7 @@ try {
 		Vmlogin custVehiDetailsOutObj = new Vmlogin();
         List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
 		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,audit_id,audit_status FROM dealer_info WHERE audit_status='2' ORDER BY insert_dt DESC";
-		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		
 		try {
 			
 			custDetailsList = this.jdbcTemplate.query(pendingQuery,
@@ -331,7 +330,7 @@ try {
 		Vmlogin custVehiDetailsOutObj = new Vmlogin();
         List<Vmlogin> custDetailsList = new ArrayList<Vmlogin>();
 		String pendingQuery = "SELECT sno,dealer_name,location,address,ctp_name,ctp_mobileno,appt_dt,audit_id,audit_status FROM dealer_info WHERE audit_status='3' ORDER BY insert_dt DESC";
-		System.out.println("pendingQuery------------------------------------->"+pendingQuery);
+		
 		try {
 			
 			custDetailsList = this.jdbcTemplate.query(pendingQuery,

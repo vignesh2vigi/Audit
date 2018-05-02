@@ -14,7 +14,7 @@ app.config(function($routeProvider) {
         controller:'VmController'
         })
         .when("/assign/:audit_id", {
-        templateUrl : 'view/insert.html',
+        templateUrl : 'view/dealerlist.html',
         controller:'VmController'
         })
         .when("/stock", {
@@ -27,6 +27,10 @@ app.config(function($routeProvider) {
         })
         .when("/dealerlist", {
         templateUrl : 'view/dealerlist.html',
+        controller:'VmController'
+        })
+         .when("/dash", {
+        templateUrl : 'view/dash.html',
         controller:'VmController'
         })
          .when("/assignlist", {

@@ -10,7 +10,7 @@ app.controller('UserController',function($scope,UserService,$location,$rootScope
 		console.log(response.status)
 		$rootScope.currentUser=response.data //username
 		$cookieStore.put('currentUser',response.data)
-		$location.path('/insert')
+		$location.path('/dealerlist')
 		
 	},function(response){
 		console.log(response.data)
@@ -18,8 +18,8 @@ app.controller('UserController',function($scope,UserService,$location,$rootScope
 		$scope.error=response.data
 	console.log(response.status)
 	if(response.status==415){
-    	
-		$location.path('/insert')
+		$scope.error=response.data
+		$location.path('/login')
 	}
     	 $location.path('/login')
 	})
